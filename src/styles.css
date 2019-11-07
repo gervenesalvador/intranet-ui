@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  font-family: 'Roboto', sans-serif;
+  background-color: #F2F2F2;
+}
+* {
+  font-family: 'Maven Pro', sans-serif;
 }

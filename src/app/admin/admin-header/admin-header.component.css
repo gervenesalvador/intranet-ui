@@ -1,0 +1,26 @@
+#header {
+    height: 105px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+#header .navbar {
+    background-color: #0f0f0f !important;
+    height: 105px;
+    padding: 0 60px;
+}
+#header .navbar .header-profile-picture {
+    height: 53px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+.nav-item {
+    display: table;
+    height: 100%;
+}
+.nav-item .nav-link {
+    display: table-cell;
+    vertical-align: middle;
+}

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
-
 import Swal from 'sweetalert2';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,49 +15,54 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   subscriptionLogin: Subscription;
+  loading = false;
+  authorize = false;
 
   constructor(
     private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { 
+    let is_authorize = this.route.snapshot.queryParamMap.get('authorize');
+    if (is_authorize !== null && is_authorize === 'failed') {
+      this.authorize = true;
+    }
 
+    if ( this.authService.checkAuth() ) {
+      this.router.navigate(['/admin/dashboard']);
+    }
   }
 
   ngOnInit() {
-    // const _this = this;
+    const _this = this;
 
     this.subscriptionLogin = this.authService.authLogin.subscribe(
-      (auth: any) => {
-        console.log(auth);
-        // if (typeof auth !== 'undefined' && auth.status === 'notfound') {
-        //   // Swal(
-        //   //   'Invalid Account',
-        //   //   'Please check your credentials and try to login again.',
-        //   //   'error'
-        //   // );
-        // }
+      (response: any) => {
+        
+        if (typeof response === 'undefined') {
+          Swal('Invalid Account', 'Something went wrong', 'error');
+          this.loading = false;
+        }
 
-        // if (typeof auth !== 'undefined' && auth.status === 'success') {
-        //   _this.authService.setAuthStorage(auth);
+        if (response.status === 'failed') {
+          Swal('Invalid Account', _this.authService.error_list[response.error.code], 'error');
+          this.loading = false;
+        }
 
-        //   if ( this.authService.checkAuth() ) {
-        //     // Swal({
-        //     //   title: 'Preparing this device...',
-        //     //   timer: 2000,
-        //     //   onOpen: function () {
-        //     //     Swal.showLoading();
-        //     //   }
-        //     // }).then(
-        //     //   function () {
-        //     //       _this.router.navigate(['/']);
-        //     //   }
-        //     // ).catch(Swal.noop);
-        //   }
-        // }
+        if (response.status === 'failed_request') {
+          Swal('Error!', response.error.message, 'error');
+          this.loading = false;
+        }
+
+        if (response.status === 'success') {
+          _this.authService.setAuthStorage(response.user);
+          if ( _this.authService.checkAuth() ) {
+            _this.router.navigate(['/admin/dashboard']);
+          }
+        }
       }
     );
-
     this.initLoginForm();
-    console.log("test");
   }
 
   initLoginForm() {
@@ -70,6 +76,7 @@ export class LoginComponent implements OnInit {
     var loginValues = this.loginForm.value;
     // console.log(loginValues)
     if (this.loginForm.valid) {
+      this.loading = true;
       this.authService.httpLogin(loginValues);
     }
   }

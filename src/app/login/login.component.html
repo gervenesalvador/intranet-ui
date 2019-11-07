@@ -3,6 +3,9 @@
     <div class="login-logo">
       <img src="/assets/images/GH-Intranet-Logo-150ppi.png" alt="">
     </div>
+    <div class="alert alert-danger" role="alert" *ngIf="authorize">
+      You are not authorize. <strong>Please login in</strong>
+    </div>
     <div class="login-form-container">
       <form [formGroup]="loginForm" id="loginFrm" (ngSubmit)="onLogin()">
         <h1 class="text-center" (click)="openDialog()">Login</h1>
@@ -18,7 +21,10 @@
           <input class="form-check-input" type="checkbox" value="" id="remember_password">
           <label class="form-check-label" for="remember_password">Remember Password</label>
         </div>
-        <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary w-100">Login</button>
+        <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary w-100">
+          Login
+          <img *ngIf="loading" class="pl-3" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </button>
       </form>
     </div>
   </div>
